@@ -35,7 +35,7 @@
     </jdbc:initialize-database>
 
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
-        <property name="persistenceUnitName" value="task7_pu"/>
+        <property name="persistenceUnitName" value="cfsHW_pu"/>
         <property name="dataSource" ref="task7DataSource"/>
     </bean>
 
