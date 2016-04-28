@@ -61,7 +61,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private TransitionViewRepository transitionViewRepository;
 
-
     /**
      * {@inheritDoc}
      */
@@ -69,7 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getCustomerByUserName(final String userName) {
         return customerRepository.getCustomerByUserName(userName);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -77,9 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean login(final String userName, final String password) {
         Customer customer = customerRepository.getCustomerByUserName(userName);
         return customer != null && customer.checkPassword(password);
-
     }
-
     /**
      * {@inheritDoc}
      */
@@ -87,40 +83,31 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer loginCustomer(final String userName, final String password) {
         Customer customer = customerRepository.getCustomerByUserName(userName);
         boolean result = customer != null && customer.checkPassword(password);
-
         if (result) {
             return customer;
         } else {
             return null;
         }
     }
-
     @Transactional(readOnly = true)
     public List<Customer> getCustomerList() {
         return customerRepository.findAllCustomer();
     }
-
     @Transactional(readOnly = true)
     @Override
     public Customer getCustomerById(String customerId) throws CfsException {
-
         Integer id = Integer.valueOf(customerId);
         return getCustomerById(id);
-
     }//why there is String customer Id
-
     @Transactional(readOnly = true)
     @Override
     public Customer getCustomerById(int customerId) throws CfsException {
         return customerRepository.findCustomerById(customerId);
     }
-
     @Override
     @Transactional
     public synchronized void buyFund(String customerIdAsString, String fundIdAsString, String amountAsString) throws CfsException {
-
         Customer customer = customerRepository.findCustomerById(Util.formatToInteger(customerIdAsString));
-
         int fundId;
         long amount;
         try {
@@ -129,28 +116,20 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (Exception e) {
             throw new CfsException(CfsException.CODE_INVALID_INPUT_DATA);
         }
-
         if (!Util.isValidTransactionAmount(amount)) {
             throw new CfsException(CfsException.CODE_MAX_DEPOSITION);
         }
-
         if (customer.getCash() < amount) {
             throw new CfsException(CfsException.CODE_INSUFFICIENT_BALANCE);
-
         }
-
         customer.setCash(customer.getCash() - amount);
         customerRepository.update(customer);
-
         Fund fund = fundRepository.getFundById(fundId);
         if (fund == null) {
             throw new CfsException(CfsException.CODE_INVALID_FUND_NAME);
         }
-
-
         Position position = new Position(fund.getId(), customer.getId(), CCConstants.POSITION_STATUS_TO_BE_BOUGHT);
         positionRepository.create(position);
-
         Transition transition = new Transition();
         transition.setPositionId(position.getId());
         transition.setAmount(amount);
@@ -159,18 +138,12 @@ public class CustomerServiceImpl implements CustomerService {
         transition.setType(CCConstants.TRAN_TYPE_BUY_FUND);
         transition.setStatus(CCConstants.TRAN_STATUS_PENDING);
         transitionRepository.create(transition);
-
-
     }
 
     @Transactional
     public synchronized void buyFundBySymbolForTask8(String customerIdAsString, String fundSymbol, String cashValue) throws CfsException {
-
         System.out.println("Begin Thread :" + Thread.currentThread().getName() + ", buyFundBySymbolForTask8 : ");
-
-
         Customer customer = customerRepository.findCustomerById(Util.formatToInteger(customerIdAsString));
-
         long amount;
         try {
             Util.validScript(fundSymbol);
@@ -178,22 +151,17 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (Exception e) {
             throw new CfsException(CfsException.CODE_INVALID_INPUT_DATA);
         }
-
         if (!Util.isValidTransactionAmount(amount)) {
             throw new CfsException(CfsException.CODE_MAX_DEPOSITION);
         }
-
         if (customer.getCash() < amount) {
             throw new CfsException(CfsException.CODE_INSUFFICIENT_BALANCE);
         }
-
         Fund fund = fundRepository.getFundBySymbol(fundSymbol);
         if (fund == null) {
             throw new CfsException(CfsException.CODE_INVALID_SYMBOL);
         }
-
         long pricePerShare = fund.getLastPrice();
-
 //        if (amount < pricePerShare) {
 //            throw new CfsException(CfsException.CODE_INVALID_MINI_SHARES_AMOUNT);
 //        }
@@ -232,7 +200,6 @@ public class CustomerServiceImpl implements CustomerService {
             inPossessionPositionList.get(0).setShares(totalShares);
             positionRepository.update(inPossessionPositionList.get(0));
         }
-
         Transition transition = new Transition();
         if (shouldSavePositionId) {
             transition.setPositionId(position.getId());
@@ -246,17 +213,13 @@ public class CustomerServiceImpl implements CustomerService {
         transition.setStatus(CCConstants.TRAN_STATUS_DONE);
         transition.setExecuteDate(Util.getCurrentDayTimestamp());
         transitionRepository.create(transition);
-
         System.out.println("End Thread :" + Thread.currentThread().getName() + ", buyFundBySymbolForTask8 : ");
-
     }
-
 
     @Override
     @Transactional
     public synchronized void sellFund(String customerIdAsString, String fundIdAsString, String sharesAsString) throws CfsException {
         Customer customer = customerRepository.findCustomerById(Util.formatToInteger(customerIdAsString));
-
         int fundId;
         long shares;
         try {
@@ -265,38 +228,29 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (Exception e) {
             throw new CfsException(CfsException.CODE_INVALID_INPUT_DATA);
         }
-
         if (!Util.isValidTransactionAmount(shares)) {
             throw new CfsException(CfsException.CODE_MAX_DEPOSITION);
         }
-
         Fund fund = fundRepository.getFundById(fundId);
         if (fund == null) {
             throw new CfsException(CfsException.CODE_INVALID_FUND_ID);
         }
-
         sellFund(customer, fund, shares);
     }
 
     @Transactional
     private synchronized void sellFund(Customer customer, Fund fund, long shares) throws CfsException {
-
         Position position = positionRepository.getPossessedPositionByCustomerIdAndFundId(customer.getId(), fund.getId());
         if (position == null || position.getShares() < shares) {
             throw new CfsException(CfsException.CODE_INSUFFICIENT_SHARES);
         }
-
         //update the current position.
         position.setShares(position.getShares() - shares);
         positionRepository.update(position);
-
-
         //create the pending position.
         Position pendingPosition = new Position(fund.getId(), customer.getId(), CCConstants.POSITION_STATUS_TO_BE_SOLD);
         pendingPosition.setShares(shares);
         positionRepository.create(pendingPosition);
-
-
         //create the pending transition.
         Transition transition = new Transition();
         transition.setShares(shares);
@@ -310,22 +264,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     private synchronized void sellFundForTask8(Customer customer, Fund fund, long shares) throws CfsException {
-
         Position position = positionRepository.getPossessedPositionByCustomerIdAndFundId(customer.getId(), fund.getId());
         if (position == null || position.getShares() < shares) {
             throw new CfsException(CfsException.CODE_INSUFFICIENT_SHARES);
         }
-
         //update the current position.
         position.setShares(position.getShares() - shares);
         positionRepository.update(position);
-
-
         //update the balance
         long cash = Util.formatCash(fund.getLastPrice(), shares);
         customer.setCash(customer.getCash() + cash);
         customerRepository.update(customer);
-
         //create the pending transition.
         Transition transition = new Transition();
         transition.setShares(shares);
@@ -342,8 +291,6 @@ public class CustomerServiceImpl implements CustomerService {
         transition.setExecuteDate(Util.getCurrentDayTimestamp());
         transitionRepository.create(transition);
     }
-
-
     @Transactional
     @Override
     public synchronized void sellFundBySymbolForTask8(String customerIdAsString, String fundSymbol, String numShares) throws CfsException {
@@ -403,20 +350,16 @@ public class CustomerServiceImpl implements CustomerService {
         transition.setType(CCConstants.TRAN_TYPE_REQUEST_CHECK);
         transition.setStatus(CCConstants.TRAN_STATUS_PENDING);
         transitionRepository.create(transition);
-
     }
-
     @Override
     public List<TransitionView> getTransitionViewListByCustomerId(String customerIdAsString) throws CfsException {
         int customerId = Util.formatToInteger(customerIdAsString);
         return getTransitionViewListByCustomerId(customerId);
     }
-
     @Override
     public List<TransitionView> getTransitionViewListByCustomerId(int customerId) throws CfsException {
         return transitionViewRepository.getTransitionListByCustomerId(customerId);
     }
-
     @Override
     public List<PositionView> getPositionViewListByCustomerIdAndStatus(String customerIdAsString, String positionStatusAsString) throws CfsException {
         int customerId = Util.formatToInteger(customerIdAsString);
@@ -502,9 +445,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String generateBarChartData() {
-
         List<Fund> fundList = fundRepository.findAllFund();
-
         if (Util.isEmptyList(fundList)) {
             return null;
         }
@@ -512,21 +453,15 @@ public class CustomerServiceImpl implements CustomerService {
         for (int i = 0; i < fundList.size(); i++) {
             labelArray[i] = fundList.get(i).getFundName();
         }
-
-
         DataSet[] dataSetArray = new DataSet[1];
         dataSetArray[0] = constructDataSet(fundList);
-
-
         BarChartData barChartData = new BarChartData();
         barChartData.setDatasets(dataSetArray);
         barChartData.setLabels(labelArray);
-
         String result = new Gson().toJson(barChartData);
         System.out.println("generateBarChartData:" + result);
         return result;
     }
-
     private DataSet constructDataSet(List<Fund> fundList) {
         DataSet dataSet = new DataSet();
         double[] data = new double[fundList.size()];
@@ -536,7 +471,6 @@ public class CustomerServiceImpl implements CustomerService {
         dataSet.setData(data);
         return dataSet;
     }
-
     private DataSet constructDataSetForFundPrice(List<FundPriceHistoryView> fundList) {
         DataSet dataSet = new DataSet();
         double[] data = new double[fundList.size()];

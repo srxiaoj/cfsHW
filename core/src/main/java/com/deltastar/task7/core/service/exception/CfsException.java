@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
  * Delta Star Team
  */
 public class CfsException extends Exception {
-
-
     public static final int CODE_INSUFFICIENT_BALANCE = 1;
     public static final int CODE_INVALID_FUND_NAME = 2;
     public static final int CODE_INSUFFICIENT_SHARES = 3;
@@ -44,7 +42,6 @@ public class CfsException extends Exception {
     public static final int CODE_INVALID_SHARES = 32;
     public static final int CODE_INVALID_MINI_SHARES_AMOUNT = 33;
 
-
     private int code;
 
     public CfsException(int code) {
@@ -52,25 +49,20 @@ public class CfsException extends Exception {
         this.code = code;
 
     }
-
     public CfsException(int code, String message) {
         super(message);
         this.code = code;
 
     }
-
     public int getCode() {
         return code;
     }
-
     public void setCode(int code) {
         this.code = code;
     }
-
     public CfsException(String message) {
         super(message);
     }
-
     public static String getMessageByErrorCode(int errorCode) {
         // this then call the resource bundle under core.src.main...resources.META-INF.cfs.properties
         switch (errorCode) {
@@ -142,5 +134,4 @@ public class CfsException extends Exception {
                 return null;
         }
     }
-
 }

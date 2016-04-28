@@ -41,10 +41,8 @@ import java.util.List;
 @Service
 @Transactional
 public class FundServiceImpl implements FundService {
-
     @Autowired
     private FundRepository fundRepository;
-
     /**
      * {@inheritDoc}
      */
@@ -52,7 +50,6 @@ public class FundServiceImpl implements FundService {
     public Fund create(final Fund fund) {
         return fundRepository.create(fund);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -60,7 +57,6 @@ public class FundServiceImpl implements FundService {
     public Fund update(Fund fund) {
         return fundRepository.update(fund);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -68,7 +64,6 @@ public class FundServiceImpl implements FundService {
     public void remove(final Fund fund) {
         fundRepository.remove(fund);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -76,9 +71,7 @@ public class FundServiceImpl implements FundService {
     public Fund getFundById(final int id) {
         return fundRepository.getFundById(id);
     }
-
     public List<Fund> getFundList() {
         return fundRepository.findAllFund();
     }
-
 }

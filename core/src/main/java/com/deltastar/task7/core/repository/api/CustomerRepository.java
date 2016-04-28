@@ -42,9 +42,7 @@ public interface CustomerRepository {
      * @return the customer with the given userName or null if no such customer
      */
     Customer getCustomerByUserName(final String userName);
-
     Customer getCustomerBySessionToken(final String sessionToken);
-
     /**
      * Create a customer.
      *

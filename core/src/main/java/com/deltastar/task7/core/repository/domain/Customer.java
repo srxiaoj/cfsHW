@@ -30,7 +30,6 @@ public class Customer {
     private String state;
     private String zipcode;
 
-
     private int salt;
     private String password;
     private String sessionToken;
@@ -41,7 +40,8 @@ public class Customer {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Customer(String userName, String password, String firstName, String lastName, String addressLine1, String addressLine2, String city, String state, String zipcode) {
+    public Customer(String userName, String password, String firstName, String lastName, String addressLine1,
+                    String addressLine2, String city, String state, String zipcode) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -53,7 +53,8 @@ public class Customer {
         this.zipcode = zipcode;
     }
 
-    public Customer(String userName, String firstName, String lastName, String addressLine1, String addressLine2, String city, String state, String zipcode) {
+    public Customer(String userName, String firstName, String lastName, String addressLine1,
+                    String addressLine2, String city, String state, String zipcode) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;

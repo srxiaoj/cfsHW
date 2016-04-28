@@ -81,7 +81,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return entityManager.find(Customer.class, customerId);
 
     }
-
     /**
      * {@inheritDoc}
      */
@@ -110,10 +109,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         List<Customer> customers = query.getResultList();
         return (customers != null && !customers.isEmpty()) ? customers.get(0) : null;
     }
-
     @Override
     public List<Customer> findCustomerByUserNameOrFirstNameOrLastName(String userName, String firstName, String lastName) {
-
         TypedQuery<Customer> query = entityManager.createNamedQuery("findCustomerByKeyWords", Customer.class);
         query.setParameter("p_userName", "%" + userName + "%");
         query.setParameter("p_firstName", "%" + firstName + "%");
