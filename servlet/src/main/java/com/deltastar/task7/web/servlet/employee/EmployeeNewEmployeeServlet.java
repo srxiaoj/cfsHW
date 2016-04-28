@@ -50,35 +50,26 @@ public class EmployeeNewEmployeeServlet extends BaseEmployeeServlet {
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
         return Views.EMPLOYEE_CREATE_EMPLOYEE;
     }
-
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
-
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
-
         request.setAttribute("userName", userName);
         request.setAttribute("password", password);
         request.setAttribute("firstName", firstName);
         request.setAttribute("lastName", lastName);
-
         if (checkEmployeeForm(userName, password, firstName, lastName)) {
             return Views.EMPLOYEE_CREATE_EMPLOYEE;
         }
-
-
         try {
             getEmployeeService().createEmployee(userName, password, firstName, lastName);
             request.setAttribute(KEY_HINT, MessageFormat.format(getResourceBundle().getString("employee.create.success"), userName));
         } catch (CfsException e) {
             getCustomErrorList().add(e.getMessage());
         }
-
         return  Views.EMPLOYEE_CREATE_EMPLOYEE;
-
     }
-
     private boolean checkEmployeeForm(String userName, String password, String firstName, String lastName) {
         CreateEmployeeForm createEmployeeForm = new CreateEmployeeForm();
         createEmployeeForm.setFirstName(firstName);
@@ -88,12 +79,10 @@ public class EmployeeNewEmployeeServlet extends BaseEmployeeServlet {
         validateEmployeeUsername(createEmployeeForm);
         return !isValid();
     }
-
     private void validateEmployeeUsername(CreateEmployeeForm createEmployeeForm) {
         Set<ConstraintViolation<CreateEmployeeForm>> constraintViolations = getValidator().validateProperty(createEmployeeForm, "userName");
         if (!constraintViolations.isEmpty()) {
             getCustomErrorList().add(constraintViolations.iterator().next().getMessage());
         }
     }
-
 }

@@ -38,12 +38,10 @@ import java.util.Set;
 
 @WebServlet(name = "EmployeeCreateCustomerServlet", urlPatterns = {"/employee/newCustomer", "/employee/newCustomer.do"})
 public class EmployeeCreateCustomerServlet extends BaseEmployeeServlet {
-
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
         return Views.EMPLOYEE_CREATE_CUSTOMER;
     }
-
     @Override
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
         String userName = request.getParameter("userName");
@@ -57,7 +55,6 @@ public class EmployeeCreateCustomerServlet extends BaseEmployeeServlet {
         String zipcode = request.getParameter("zipcode");
         Customer customer = new Customer(userName, password, firstName,
                 lastName, addressLine1, addressLine2, city, state, zipcode);
-
         request.setAttribute("userName", userName);
         request.setAttribute("password", password);
         request.setAttribute("firstName", firstName);
@@ -67,11 +64,9 @@ public class EmployeeCreateCustomerServlet extends BaseEmployeeServlet {
         request.setAttribute("city", city);
         request.setAttribute("state", state);
         request.setAttribute("zipcode", zipcode);
-
         if (checkCustomerForm(customer)) {
             return Views.EMPLOYEE_CREATE_CUSTOMER;
         }
-
         try {
             getEmployeeService().createCustomer(userName, password, firstName, lastName,
                     addressLine1, addressLine2, city, state, zipcode);
@@ -81,7 +76,6 @@ public class EmployeeCreateCustomerServlet extends BaseEmployeeServlet {
         }
         return Views.EMPLOYEE_CREATE_CUSTOMER;
     }
-
     private boolean checkCustomerForm(Customer customer) {
         CreateCustomerForm createCustomerForm = new CreateCustomerForm();
         createCustomerForm.setFirstName(customer.getFirstName());
@@ -91,7 +85,6 @@ public class EmployeeCreateCustomerServlet extends BaseEmployeeServlet {
         validateCustomerUsername(createCustomerForm);
         return !isValid();
     }
-
     private void validateCustomerUsername(CreateCustomerForm createCustomerForm) {
         Set<ConstraintViolation<CreateCustomerForm>> constraintViolations = getValidator().validateProperty(createCustomerForm, "userName");
         if (!constraintViolations.isEmpty()) {

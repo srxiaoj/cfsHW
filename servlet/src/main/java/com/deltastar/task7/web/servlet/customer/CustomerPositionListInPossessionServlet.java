@@ -42,5 +42,4 @@ public class CustomerPositionListInPossessionServlet extends BaseCustomerPositio
     protected byte getPositionStatus() {
         return CCConstants.POSITION_STATUS_IN_POSSESSION;
     }
-
 }

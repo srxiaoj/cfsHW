@@ -9,20 +9,14 @@
             <%@ include file="../common/sidebar_employee.jspf" %>
         </div>
 
-
         <div class="span9">
-
             <%@ include file="search.jspf" %>
             <%@ include file="../common/error.jspf" %>
-
             <div class="well">
                 <div class="page-header">
                     <h1>Customer List</h1>
                 </div>
-
-
                 <table class="table table-bordered table-striped">
-
                     <thead>
                     <tr>
                         <th>User name</th>
@@ -31,7 +25,6 @@
                         <th>Transition History</th>
                     </tr>
                     </thead>
-
                     <tbody>
                     <c:forEach items="${requestScope.customerList}" var="currentCustomer">
                         <tr>
@@ -75,16 +68,12 @@
                 </c:if>
 
             </div>
-
             <c:if test="${sessionScope.employee != null && sessionScope.employee.type == 1}">
-
                 <div class="well">
                     <div class="page-header">
                         <h1>Employee List</h1>
                     </div>
-
                     <table class="table table-bordered table-striped">
-
                         <thead>
                         <tr>
                             <th>ID</th>

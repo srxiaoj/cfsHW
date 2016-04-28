@@ -42,10 +42,8 @@ import java.util.List;
 @WebServlet(name = "EmployeeTransitionDay", urlPatterns = {"/employee/fundList", "/employee/executeTransitionDay.do"})
 public class EmployeeTransitionDay extends BaseEmployeeServlet {
 
-
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
-
         String executionDay = Util.getCurrentDay();
         request.setAttribute("executionDay", executionDay);
         List<Fund> fundList = getEmployeeService().getFundList();
@@ -54,10 +52,8 @@ public class EmployeeTransitionDay extends BaseEmployeeServlet {
         request.setAttribute("totalCountFund", totalCount);
         return Views.EMPLOYEE_TRANSITION_DAY;
     }
-
     @Override
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
-
         String[] prices = request.getParameterValues("price");
         String[] fundIds = request.getParameterValues("fundId");
         String executionDay = request.getParameter("executionDay");
@@ -70,24 +66,18 @@ public class EmployeeTransitionDay extends BaseEmployeeServlet {
         int totalCount = fundList.size();
         request.setAttribute("totalCountFund", totalCount);
         try {
-
             Util.formatTimeStamp(executionDay);
             if (prices != null && prices.length > 0 && fundIds != null && fundIds.length > 0 && hasValidPrice(prices)) {
                 getEmployeeService().executeTransitionDay(prices, fundIds, executionDay);
                 request.setAttribute(KEY_HINT, CCConstants.HINT_SUCCESS);
             } else {
                 getCustomErrorList().add("No validate price for funds.");
-
             }
         } catch (CfsException e) {
             getCustomErrorList().add(e.getMessage());
         }
-
-
         return Views.EMPLOYEE_TRANSITION_DAY;
     }
-
-
     private boolean hasValidPrice(String[] prices) {
         for (String price : prices) {
             if (!Util.isEmpty(price)) {
@@ -96,6 +86,4 @@ public class EmployeeTransitionDay extends BaseEmployeeServlet {
         }
         return false;
     }
-
-
 }

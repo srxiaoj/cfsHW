@@ -49,7 +49,6 @@ public abstract class BaseEmployeeServlet extends BaseHttpServlet {
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletConfig.getServletContext());
         employeeService = applicationContext.getBean(EmployeeService.class);
     }
-
     public EmployeeService getEmployeeService() {
         return employeeService;
     }
