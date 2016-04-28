@@ -72,6 +72,7 @@ public class CfsException extends Exception {
     }
 
     public static String getMessageByErrorCode(int errorCode) {
+        // this then call the resource bundle under core.src.main...resources.META-INF.cfs.properties
         switch (errorCode) {
             case CODE_INSUFFICIENT_BALANCE:
                 return ResourceBundle.getBundle("cfs").getString("insufficient.balance");

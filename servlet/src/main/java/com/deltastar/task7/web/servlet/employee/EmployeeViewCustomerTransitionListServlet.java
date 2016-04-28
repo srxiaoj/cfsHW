@@ -47,10 +47,7 @@ public class EmployeeViewCustomerTransitionListServlet extends BaseEmployeeServl
 
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
-
         String customerId = request.getParameter("customerId");
-
-
         List<TransitionView> transitionViewList = null;
         try {
             transitionViewList = getEmployeeService().getTransitionViewList(customerId);
@@ -59,7 +56,6 @@ public class EmployeeViewCustomerTransitionListServlet extends BaseEmployeeServl
         } catch (CfsException e) {
             getCustomErrorList().add(e.getMessage());
         }
-
         if (!Util.isEmptyList(transitionViewList)) {
             request.setAttribute("transitionViewList", transitionViewList);
             request.setAttribute("totalCountTransitionView", transitionViewList.size());

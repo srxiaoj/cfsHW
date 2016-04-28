@@ -41,11 +41,9 @@ import java.util.List;
 
 @WebServlet(name = "EmployeeSearchServlet", urlPatterns = EmployeeSearchServlet.EMPLOYEE_SEARCH)
 public class EmployeeSearchServlet extends BaseEmployeeServlet {
-
     public static final String EMPLOYEE_SEARCH = "/employee/search.do";
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
-
         String keywords = request.getParameter("keyWords");
         request.setAttribute("keyWords", keywords);
         List<List<?>> matchedResult = null;
