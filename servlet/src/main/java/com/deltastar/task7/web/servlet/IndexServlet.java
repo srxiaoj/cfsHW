@@ -45,13 +45,10 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "IndexServlet", urlPatterns = {"", IndexServlet.INDEX})
 public class IndexServlet extends BaseHttpServlet {
-
-
     public static final String INDEX = "/index";
 
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
-
         HttpSession session = request.getSession();
         Employee employee = (Employee) session.getAttribute(CfsUtils.SESSION_EMPLOYEE);
         Customer customer = (Customer) session.getAttribute(CfsUtils.SESSION_CUSTOMER);
@@ -63,11 +60,8 @@ public class IndexServlet extends BaseHttpServlet {
             return Views.INDEX_PAGE;
         }
     }
-
-
     @Override
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
         return performDoGet(request, response);
     }
-
 }

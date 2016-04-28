@@ -12,10 +12,8 @@ public class LogoutServlet extends BaseHttpServlet {
         request.getSession().invalidate();
         return IndexServlet.INDEX;
     }
-
     @Override
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
         return performDoGet(request, response);
     }
-
 }

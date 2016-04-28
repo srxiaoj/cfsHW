@@ -45,11 +45,12 @@ import java.util.ResourceBundle;
  */
 
 public abstract class BaseHttpServlet extends HttpServlet {
-
     private ResourceBundle resourceBundle;
     private Validator validator;
     private List<String> customErrorList = new ArrayList<>();
     public static final String KEY_HINT = "hint";
+
+    protected abstract String performDoGet(HttpServletRequest request, HttpServletResponse response);
 
     @Override
     public void init() throws ServletException {
@@ -58,23 +59,15 @@ public abstract class BaseHttpServlet extends HttpServlet {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         customErrorList.clear();
         sendToNextPage(performDoGet(request, response), request, response);
-
-
     }
-
-    protected abstract String performDoGet(HttpServletRequest request, HttpServletResponse response);
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         customErrorList.clear();
         sendToNextPage(performDoPost(request, response), request, response);
-
     }
-
     private void sendToNextPage(String nextPage, HttpServletRequest request,
                                 HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("customErrorList", getCustomErrorList());
@@ -90,25 +83,19 @@ public abstract class BaseHttpServlet extends HttpServlet {
             System.out.println("SendRedirect to " + path);
             response.sendRedirect(path);
         }
-
     }
-
     protected String performDoPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         return performDoGet(httpServletRequest, httpServletResponse);
     }
-
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
-
     public Validator getValidator() {
         return validator;
     }
-
     public List<String> getCustomErrorList() {
         return customErrorList;
     }
-
     public boolean isValid() {
         return customErrorList.size() == 0;
     }

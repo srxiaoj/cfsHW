@@ -35,16 +35,9 @@ import java.util.regex.Pattern;
  * Delta Star Team
  */
 public class CfsUtils {
-
-    private CfsUtils() {
-    }
-
-    public static final String SESSION_USER = "user";
+    private CfsUtils() {}
     public static final String SESSION_EMPLOYEE = "employee";
     public static final String SESSION_CUSTOMER = "customer";
-
-    public static final String DATE_FORMAT = "dd/MM/yyyy";
-
 
     /**
      * Return the css style to apply for the given status.
@@ -55,7 +48,6 @@ public class CfsUtils {
     public static String getStatusStyle(boolean status) {
         return status ? "label-success" : "";
     }
-
     /**
      * Return the label of the given status.
      *
@@ -65,7 +57,6 @@ public class CfsUtils {
     public static String getStatusLabel(boolean status) {
         return status ? "DONE" : "TODO";
     }
-
     /**
      * Apply a search/replace of the pattern in the input text.
      *
@@ -74,7 +65,6 @@ public class CfsUtils {
      * @return the transformed text
      */
     public static String highlight(final String input, final String pattern) {
-
         String cssClass = "label label-warning";
         String startSpanTag = "<span class=\"" + cssClass + "\">";
         String endSpanTag = "</span>";
@@ -85,17 +75,11 @@ public class CfsUtils {
 
         Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = p.matcher(input);
-
         return matcher.replaceAll(stringBuilder.toString());
-
     }
-
-
     public static boolean isSuperAdmin(int type) {
         return type == CCConstants.EMPLOYEE_TYPE_SUPER_ADMIN;
     }
-
-
     public static boolean isEmpty(String source) {
         return source == null || source.trim().equals("");
     }
