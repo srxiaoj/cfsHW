@@ -73,19 +73,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee create(final Employee employee) {
         return employeeRepository.create(employee);
     }
-
-
     /**
      * {@inheritDoc}
      */
     @Transactional
     public synchronized void updatePassword(int employeeId, String password) {
-
         Employee employee = employeeRepository.getEmployeeById(employeeId);
         employee.setPassword(password);
         employee.hashPassword();
         employeeRepository.update(employee);
-
     }
 
     /**
@@ -350,7 +346,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public synchronized void updateCustomerProfile(String customerIdAsString, String userName, String firstName, String lastName, String addressLine1, String addressLine2, String city, String state, String zipcode) throws CfsException {
-
         int customerId = Util.formatToInteger(customerIdAsString);
         Customer customer = customerRepository.findCustomerById(customerId);
         validationParameterCustomer(customer);
@@ -366,82 +361,60 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Customer getCustomerById(String customerIdAsString) throws CfsException {
-
         int customerId = Util.formatToInteger(customerIdAsString);
-
         Customer result = customerRepository.findCustomerById(customerId);
-
         if (result == null) {
             throw new CfsException(CfsException.CODE_INVALID_CUSTOMER_ID);
         }
-
         return result;
-
     }
-
     @Override
     public List<TransitionView> getTransitionViewList() {
         return transitionViewRepository.getTransitionList();
     }
-
     @Override
     public List<TransitionView> getTransitionViewList(String customerIdAsString) throws CfsException {
         int customerId = Util.formatToInteger(customerIdAsString);
         return transitionViewRepository.getTransitionListByCustomerId(customerId);
     }
-
     @Override
     public List<Fund> getFundList() {
         return fundRepository.findAllFund();
     }
-
     public Fund getFundById(String fundIdAsString) throws CfsException {
-
         int fundId = Util.formatToInteger(fundIdAsString);
         Fund result = fundRepository.getFundById(fundId);
-
         if (result == null) {
             throw new CfsException(CfsException.CODE_INVALID_FUND_ID);
         }
-
         return result;
     }
-
     @Override
     public List<FundPriceHistoryView> getFundPriceHistoryViewList(String fundIdAsString) throws CfsException {
         int fundId = Util.formatToInteger(fundIdAsString);
         return fundPriceHistoryViewRepository.getFundPriceHistoryViewListById(fundId);
     }
-
     @Override
     public List<List<?>> search(String keywords) throws CfsException {
-
         if (keywords == null || keywords.replaceAll(" ", "").equals("")) {
             throw new CfsException(CfsException.CODE_INVALID_KEYWORDS);
         }
         List<List<?>> result = new ArrayList<>();
         List<Customer> customerList = customerRepository.findCustomerByUserNameOrFirstNameOrLastName(keywords, keywords, keywords);
         List<Fund> fundList = fundRepository.findFundByFundNameOrSymbol(keywords, keywords);
-
         result.add(customerList);
         result.add(fundList);
-
         return result;
     }
-
     @Transactional
     @Override
     public synchronized void executeTransitionDay(String[] priceArray, String[] fundIdArray, String executionDay) throws CfsException {
         executeTransitionDay(priceArray, fundIdArray, executionDay, false);
     }
-
     @Transactional
     @Override
     public synchronized void executeTransitionDay(String[] priceArray, String[] fundIdArray, String executionDay, boolean autoIncrementTransitionDay) throws CfsException {
-
         List<Transition> pendingTransitionList = transitionRepository.getPendingTransitionList();
-
-
         //deposit first
         Timestamp currentDayTimestamp = Util.getCurrentDayTimestamp();
         for (Transition transition : pendingTransitionList) {
@@ -454,25 +427,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                     break;
             }
         }
-
-
         if (priceArray != null && fundIdArray != null) {
-
             for (int i = 0; i < priceArray.length; i++) {
-
                 if (!Util.isEmpty(priceArray[i])) {
-
                     long price = Util.formatToLong(priceArray[i]);
-
                     if (!Util.isValidTransactionAmount(price)) {
                         throw new CfsException(CfsException.CODE_MAX_DEPOSITION);
                     }
-
                     int fundId = Util.formatToInteger(fundIdArray[i]);
                     Timestamp timestamp;
                     Fund fund = fundRepository.getFundById(fundId);
-
-
                     if (autoIncrementTransitionDay) {
                         timestamp = Util.incrementTwoDay(fund.getLastTransitionDay());
                     } else {
@@ -492,7 +456,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     fundPriceHistory.setPriceDate(timestamp);
                     fundPriceHistoryRepository.create(fundPriceHistory);
                     updateLastPriceForFund(fundId, price);
-
 
                     for (Transition transition : pendingTransitionList) {
                         transition.setExecuteDate(timestamp);
@@ -515,10 +478,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     System.out.println("fundList :" + fundIdArray[i]);
                 }
             }
-
         }
-
-
         //request check last
         for (Transition transition : pendingTransitionList) {
             transition.setExecuteDate(currentDayTimestamp);
@@ -530,10 +490,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     break;
             }
         }
-
     }
-
-
     @Override
     public synchronized void createFundExample(String fundName, String symbol, String initialValueAsString, String comment) throws CfsException {
         validationParameter(fundName, symbol, initialValueAsString, comment);

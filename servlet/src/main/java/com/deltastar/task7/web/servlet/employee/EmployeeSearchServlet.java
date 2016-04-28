@@ -43,7 +43,6 @@ import java.util.List;
 public class EmployeeSearchServlet extends BaseEmployeeServlet {
 
     public static final String EMPLOYEE_SEARCH = "/employee/search.do";
-
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
 
@@ -56,15 +55,11 @@ public class EmployeeSearchServlet extends BaseEmployeeServlet {
             List<?> fundList = matchedResult.get(1);
             request.setAttribute("customerList", customerList);
             request.setAttribute("fundList", fundList);
-
             request.setAttribute("totalCountCustomer", customerList != null ? customerList.size() : 0);
             request.setAttribute("totalCountFund", fundList != null ? fundList.size() : 0);
         } catch (CfsException e) {
             getCustomErrorList().add(e.getMessage());
         }
-
         return Views.EMPLOYEE_SEARCH_RESULT;
     }
-
-
 }

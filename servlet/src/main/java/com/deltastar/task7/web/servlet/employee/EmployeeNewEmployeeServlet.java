@@ -45,7 +45,6 @@ import java.util.Set;
 @WebServlet(name = "EmployeeNewEmployeeServlet", urlPatterns = {"/employee/newEmployee", "/employee/newEmployee.do"})
 public class EmployeeNewEmployeeServlet extends BaseEmployeeServlet {
 
-
     @Override
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
         return Views.EMPLOYEE_CREATE_EMPLOYEE;

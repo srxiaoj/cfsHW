@@ -61,7 +61,6 @@ public class EmployeeUpdateCustomerProfileServlet extends BaseEmployeeServlet {
         String state = request.getParameter("state");
         String zipcode = request.getParameter("zipcode");
 
-
         Customer customer = new Customer();
         customer.setUserName(userName);
         customer.setFirstName(firstName);

@@ -46,13 +46,10 @@ public class EmployeeUpdateCustomerPasswordServlet extends BaseEmployeeServlet {
     protected String performDoGet(HttpServletRequest request, HttpServletResponse response) {
         return Views.EMPLOYEE_UPDATE_CUSTOMER;
     }
-
     @Override
     protected String performDoPost(HttpServletRequest request, HttpServletResponse response) {
-
         String password = request.getParameter("password");
         String customerId = request.getParameter("customerId");
-
         try {
             Customer customer = getEmployeeService().getCustomerById(customerId);
             request.setAttribute("customerId", customerId);
@@ -64,7 +61,5 @@ public class EmployeeUpdateCustomerPasswordServlet extends BaseEmployeeServlet {
         }
         // FIXME: 1/13/16 should just refresh the current page instead of going back to customer list page.
         return Views.EMPLOYEE_UPDATE_CUSTOMER;
-
     }
-
 }
